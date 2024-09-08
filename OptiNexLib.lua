@@ -21,7 +21,7 @@ local GUI = {
 -- Function to toggle visibility of nested elements in Main, including setting Main's background transparency
 local function setNestedElementsVisibility(visible)
 	for _, child in ipairs(GUI["2"]:GetChildren()) do
-		-- Exclude the TopBar, dragHandle from being hidden
+		-- Exclude the TopBar, dragHandle, and DropShadow from being hidden
 		if child:IsA("GuiObject") and child ~= GUI["6"] and child.Name ~= "DragHandle" then
 			child.Visible = visible
 		end
@@ -31,7 +31,7 @@ local function setNestedElementsVisibility(visible)
 end
 local function toggleMainUI()
 	if isMainVisible then
-		-- Hide all elements in Main except for the top bar, drag handle
+		-- Hide all elements in Main except for the top bar, drag handle, and dropshadow
 		setNestedElementsVisibility(false)
 	else
 		-- Show all elements in Main again
@@ -505,6 +505,7 @@ function GUI:init(options)
 			Tab["2a"]["PaddingRight"] = UDim.new(0, 1);
 			Tab["2a"]["PaddingLeft"] = UDim.new(0, 1);
 			Tab["2a"]["PaddingBottom"] = UDim.new(0, 1);
+			
 		end
 
 
@@ -1096,6 +1097,7 @@ function GUI:init(options)
 				Toggle["62"]["BackgroundTransparency"] = 1;
 				Toggle["62"]["Name"] = [[Checkmark]];
 				Toggle["62"]["Position"] = UDim2.new(0.5, 0, 0.5, 0);
+				updateCanvasSize(Tab["23"], Tab["31"])
 			end
 
 			-- Toggle Methods
@@ -1115,7 +1117,7 @@ function GUI:init(options)
 						GUI:tween(Toggle["62"],{ImageTransparency = 1})
 					end
 
-
+					
 					options.callback(Toggle.State)
 				end
 
@@ -1178,7 +1180,7 @@ function GUI:init(options)
 				Text = "Example Slider",
 				Min = 0,
 				Max = 100,
-				Default = (options.Max+options.Min)/2,
+				Default = 50,
 				callback = function(v) print(v) end
 			}, options or {})
 
@@ -1284,6 +1286,7 @@ function GUI:init(options)
 				-- StarterGui.MyLibrary.Main.ContentContainer.HomeTab.Slider.SliderBack.Draggable.UICorner
 				Slider["48"] = Instance.new("UICorner", Slider["47"]);
 				Slider["48"]["CornerRadius"] = UDim.new(0, 5);
+				updateCanvasSize(Tab["23"], Tab["31"])
 			end
 
 			-- Slider Methods
@@ -1379,11 +1382,116 @@ function GUI:init(options)
 			return Slider
 		end
 
-
+		
 		return Tab
 	end
 
-
+	
 	return GUI
 end
 --~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~
+
+
+
+-- !!!!!!!!!!!!!!!!!!!!!!!!!! Creating the UI and its features:
+local main = GUI:init {
+	Name = "Test Title",
+	Color = "80,100,160"
+}
+
+-- Tab creation
+local Tab = GUI:NewTab{ 
+	Name = "Home",
+	Icon = nil
+}
+
+local Warning = Tab:Warning{
+	Message = "Preview Warning Text"
+}
+
+local Info = Tab:Info{
+	Message = "Preview Info Text"
+}
+
+
+local Button = Tab:Button{
+	Name = "Test B1 - Update Warning", 
+	Icon = "rbxassetid://99964162522981",
+	callback = function() 
+		print("Button 1 PRESSED!!")
+		Warning:SetText("Updated Warning Text")
+	end
+}
+
+local Button2 = Tab:Button{
+	Name = "Test B2 - Update Info",
+	Icon = "rbxassetid://99964162522981",  
+	callback = function() 
+		print("Button 2 PRESSED!!") 
+		Info:SetText("Updated Info Text")
+	end
+}
+
+local Button3 = Tab:Button{
+	Name = "Test B3 - Update Button", 
+	Icon = "rbxassetid://99964162522981",
+	callback = function() 
+		print("Button 3 PRESSED!!")
+		Button:SetText("Updated Button Text")
+	end
+}
+
+
+-- Tab2 creation
+
+local Tab2 = GUI:NewTab{ 
+	Name = "Tab 2",
+	Icon = "rbxassetid://112636639326849"
+}
+
+local jumpEnabled = false  -- Variable to control the loop
+local Toggle = Tab2:Toggle{
+	Name = "Jump Toggle",
+	callback = function(v)
+		jumpEnabled = v
+		while jumpEnabled do
+			wait()
+			game.Players.LocalPlayer.Character.Humanoid.Jump = true
+		end
+	end
+}
+
+local Button5 = Tab2:Button{
+	Name = "Reset Toggle",
+	Icon = "rbxassetid://99964162522981",  
+	callback = function() 
+		print("Button 6 PRESSED!! Reset Toggle!!")
+		Toggle:Status(false)
+	end
+}
+
+local Slider = Tab2:Slider{
+	Text = "WalkSpeed",
+	Min = 0,
+	Max = 200,
+	Default = 16,
+	callback = function(v)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v
+	end
+}
+
+local Label = Tab2:Label{
+	Message = "Preview Label Text"
+}
+
+local Button4 = Tab2:Button{
+	Name = "Test B4 - Update Label",
+	Icon = "rbxassetid://99964162522981",  
+	callback = function() 
+		print("Button 4 PRESSED!! Reset WalkSpeed 16!!")
+		Label:SetText("Updated Label Text ")
+		Slider:SetValue(16)
+		Slider:SetText("Updated Slider Text")
+		Toggle:SetText("Updated Toggle Text")
+	end
+}
