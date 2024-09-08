@@ -21,7 +21,7 @@ local GUI = {
 -- Function to toggle visibility of nested elements in Main, including setting Main's background transparency
 local function setNestedElementsVisibility(visible)
 	for _, child in ipairs(GUI["2"]:GetChildren()) do
-		-- Exclude the TopBar, dragHandle, and DropShadow from being hidden
+		-- Exclude the TopBar, dragHandle from being hidden
 		if child:IsA("GuiObject") and child ~= GUI["6"] and child.Name ~= "DragHandle" then
 			child.Visible = visible
 		end
@@ -31,7 +31,7 @@ local function setNestedElementsVisibility(visible)
 end
 local function toggleMainUI()
 	if isMainVisible then
-		-- Hide all elements in Main except for the top bar, drag handle, and dropshadow
+		-- Hide all elements in Main except for the top bar, drag handle
 		setNestedElementsVisibility(false)
 	else
 		-- Show all elements in Main again
