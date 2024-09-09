@@ -109,8 +109,10 @@ end
 
 --~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~ GUI Structure in whole --~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~
 function GUI:init(options)	
+	 print("Initializing GUI with options:", options)
 	---------------------- Main UI 
 	do
+		print("Setting up Main UI")
 		---------------------------------------------------------------- DEFAULTS for Main Gui 
 		local options = options or {}
 		options = GUI:validate({
@@ -282,6 +284,7 @@ function GUI:init(options)
 
 	---------------------- Navigation UI 
 	do
+		print("Setting up Navigation UI")
 		-- Split the Color string to RGB values
 		local rgbValues = string.split(options.Color, ",")
 		local red = tonumber(rgbValues[1]) or 255
@@ -1386,7 +1389,7 @@ function GUI:init(options)
 		return Tab
 	end
 
-	
+	print("Initialization complete")
 	return GUI
 end
 --~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~--~~
